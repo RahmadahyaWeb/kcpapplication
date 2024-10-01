@@ -2781,7 +2781,7 @@ progress {
           appearance: none;
   background-color: transparent;
   background-clip: padding-box;
-  border: var(--bs-border-width) solid #ced1d5;
+  border: 2px solid #ced1d5;
   border-radius: var(--bs-border-radius);
   -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -8579,11 +8579,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
 .btn.disabled, .btn:disabled {
   cursor: default;
 }
-.btn:hover {
-  -webkit-transform: translateY(-1px);
-      -ms-transform: translateY(-1px);
-          transform: translateY(-1px);
-}
+
 
 .btn-group:has(.btn.active) .btn, .btn-group:has(.btn:active) .btn, .btn-group:has(.btn.focus) .btn, .btn-group:has(.btn:focus) .btn,
 .btn-group-vertical:has(.btn.active) .btn,
@@ -10254,7 +10250,7 @@ li:not(:first-child) .dropdown-item, .dropdown-menu .dropdown-item:not(:first-ch
 }
 .form-control:focus {
   border-width: 2px;
-  padding: calc(0.543rem - 2px) calc(0.9375rem - 2px);
+  /* padding: calc(0.543rem - 2px) calc(0.9375rem - 2px); */
 }
 .form-control.form-control-lg {
   padding: calc(0.7075rem - var(--bs-border-width)) calc(1.3125rem - var(--bs-border-width));

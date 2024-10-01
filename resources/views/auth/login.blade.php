@@ -54,12 +54,12 @@
                 <div class="card px-sm-6 px-0">
                     <div class="card-body">
                         <!-- Logo -->
-                        {{-- <div class="app-brand justify-content-center">
+                        <div class="app-brand justify-content-center">
                             <a href="/" class="app-brand-link">
-                                <img src="{{ asset('img/logo.png') }}" alt="logo-kcp"
+                                <img src="{{ asset('img/logo-hd.png') }}" alt="logo-kcp"
                                     style="width: 200px; height: auto;">
                             </a>
-                        </div> --}}
+                        </div>
                         <!-- /Logo -->
                         <h4 class="mb-1">Login</h4>
 
@@ -102,7 +102,6 @@
                                         <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                                     </div>
                                 </button>
-
                             </div>
                         </form>
                     </div>
