@@ -55,10 +55,8 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <a href="/" class="app-brand-link">
-                                <img src="{{ asset('img/logo-hd.png') }}" alt="logo-kcp"
-                                    style="width: 200px; height: auto;">
-                            </a>
+                            <img src="{{ asset('img/logo-hd.png') }}" alt="logo-kcp"
+                                style="width: 200px; height: auto;">
                         </div>
                         <!-- /Logo -->
                         <h4 class="mb-1">Login</h4>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth'])->group(function () {
+    // DASHBOARD
     Route::get('/', function () {
         return view('welcome');
     })->name('dashboard');
+
+    // DKS-SCAN
+    Route::get('dks-scan', [DksController::class, 'index'])->name('dks.scan');
+
+    // LOGOUT
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 Route::middleware(['guest'])->group(function () {

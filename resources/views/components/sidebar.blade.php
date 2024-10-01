@@ -32,35 +32,40 @@
 
     <ul class="menu-inner py-1">
         @foreach ($menuList as $menu)
+            @php
+                $access = $array = explode(',', $menu['access']);
+            @endphp
 
-            @if ($menu['is_header'])
-                <li class="menu-header small text-uppercase">
-                    <span class="menu-header-text">{{ $menu['title'] }}</span>
-                </li>
-            @else
-                @if (!empty($menu['submenus']))
-                    <li class="menu-item">
-                        <a href="{{ $menu['link'] }}" class="menu-link menu-toggle">
-                            <i class="menu-icon {{ $menu['icon'] }}"></i>
-                            <div class="text-truncate">{{ $menu['title'] }}</div>
-                        </a>
-                        <ul class="menu-sub">
-                            @foreach ($menu['submenus'] as $submenu)
-                                <li class="menu-item">
-                                    <a href="{{ $submenu->link }}" class="menu-link">
-                                        <div class="text-truncate">{{ $submenu->title }}</div>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
+            @if (in_array(Auth::user()->role, $access))
+                @if ($menu['is_header'])
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">{{ $menu['title'] }}</span>
                     </li>
                 @else
-                    <li class="menu-item">
-                        <a href="{{ $menu['link'] }}" class="menu-link">
-                            <i class="menu-icon {{ $menu['icon'] }}"></i>
-                            <div class="text-truncate">{{ $menu['title'] }}</div>
-                        </a>
-                    </li>
+                    @if (!empty($menu['submenus']))
+                        <li class="menu-item">
+                            <a href="{{ $menu['link'] }}" class="menu-link menu-toggle">
+                                <i class="menu-icon {{ $menu['icon'] }}"></i>
+                                <div class="text-truncate">{{ $menu['title'] }}</div>
+                            </a>
+                            <ul class="menu-sub">
+                                @foreach ($menu['submenus'] as $submenu)
+                                    <li class="menu-item">
+                                        <a href="{{ $submenu->link }}" class="menu-link">
+                                            <div class="text-truncate">{{ $submenu->title }}</div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @else
+                        <li class="menu-item {{ Request::is($menu['route']) ? 'active' : '' }}">
+                            <a href="{{ $menu['link'] ? route($menu['link']) : '/' }}" class="menu-link">
+                                <i class="menu-icon {{ $menu['icon'] }}"></i>
+                                <div class="text-truncate">{{ $menu['title'] }}</div>
+                            </a>
+                        </li>
+                    @endif
                 @endif
             @endif
         @endforeach
