@@ -18,6 +18,11 @@
             </div>
         </div>
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger mb-3" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
             @livewire('dks-table')
         </div>
     </div>
@@ -36,16 +41,16 @@
                         <p>Click "Start Scanning" to begin.</p>
                     </div>
 
-                    <div id="reader" class="img-fluid"></div>
+                    <div id="reader" class="img-fluid mb-3"></div>
 
-                    <div id="debug" class="my-2"></div>
+                    <div id="result" class="mb-3"></div>
 
-                    <div id="result"></div>
+                    <div class="d-grid">
+                        <button id="start-button" class="btn btn-success">Start Scanning</button>
+                        <button id="stop-button" class="btn btn-danger d-none" style="display: none;">Stop Scanning</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button id="start-button" class="btn btn-success">Start Scanning</button>
-                    <button id="stop-button" class="btn btn-danger d-none" style="display: none;">Stop Scanning</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -56,36 +61,27 @@
             let scanning = false;
 
             document.getElementById("start-button").addEventListener("click", () => {
-                // This method will trigger user permissions
-
                 function getQrBoxSize() {
-                    // Mengambil ukuran layar
                     const width = window.innerWidth;
                     const height = window.innerHeight;
-
-                    // Menghitung ukuran QR box sebagai persentase dari ukuran layar
-                    const qrBoxSize = Math.min(width, height) * 0.25; // Misalnya 25% dari ukuran terkecil
-
+                    const qrBoxSize = Math.min(width, height) * 0.25;
                     return {
-                        width: Math.max(qrBoxSize, 200), // Minimum size 200
-                        height: Math.max(qrBoxSize, 200) // Minimum size 200
+                        width: Math.max(qrBoxSize, 200),
+                        height: Math.max(qrBoxSize, 200)
                     };
                 }
+
                 Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
                         var cameraId = devices[0].id;
-
                         const config = {
                             aspectRatio: 1,
                             qrbox: getQrBoxSize(),
-                        }
+                        };
 
                         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-                            /* handle success */
-
                             const url = new URL(decodedText);
                             const kd_toko = url.searchParams.get('kd_toko');
-
                             const redirectUrl = `/dks-scan/${kd_toko}`;
                             window.location.href = redirectUrl;
                         };
@@ -96,21 +92,18 @@
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;
-                            // Switch button display
                             document.getElementById("start-button").classList.add('d-none');
                             document.getElementById("stop-button").classList.remove('d-none');
                             document.getElementById("placeholder").classList.add('d-none');
                         }).catch(err => {
-                            // Start failed, handle the error
                             document.getElementById("result").innerText =
-                                `Decoded text: ${err}`;
-                            document.getElementById("debug").innerText =
-                                `debug: ${JSON.stringify(devices, null, 2)}`;
-
+                                `Error starting scanner: ${err}`;
                         });
+                    } else {
+                        document.getElementById("result").innerText = "No camera found.";
                     }
                 }).catch(err => {
-                    // handle err
+                    document.getElementById("result").innerText = "Camera access denied or not available.";
                 });
             });
 
@@ -118,15 +111,15 @@
                 if (scanning) {
                     html5QrCode.stop().then(() => {
                         scanning = false;
-                        // Switch button display back
                         document.getElementById("start-button").classList.remove('d-none');
                         document.getElementById("stop-button").classList.add('d-none');
                         document.getElementById("placeholder").classList.remove('d-none');
                     }).catch(err => {
-                        // Stop failed, handle the error
+                        document.getElementById("result").innerText = `Error stopping scanner: ${err}`;
                     });
                 }
             });
         </script>
     @endpush
+
 @endsection

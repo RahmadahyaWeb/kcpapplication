@@ -14,7 +14,6 @@
                     <th>Nama Toko</th>
                     <th style="width: 30%">Alamat</th>
                     <th>Map</th>
-                    <th>QR</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -31,11 +30,6 @@
                                     Lihat Map
                                 </a>
                             @endif
-                        </td>
-                        <td>
-                            <a href="https://api.qrserver.com/v1/create-qr-code/?data={{ $item->kd_toko }}" target="_blank">
-                                Download
-                            </a>
                         </td>
                         <td>
                             <a href="">Edit</a>
