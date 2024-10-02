@@ -35,13 +35,16 @@
                     <div id="placeholder" class="placeholder">
                         <p>Click "Start Scanning" to begin.</p>
                     </div>
+
                     <div id="reader" class="img-fluid"></div>
-                    <div id="result" class="mb-5 text-center"></div>
+
+                    <div id="debug" class="my-2"></div>
+
+                    <div id="result"></div>
                 </div>
                 <div class="modal-footer">
                     <button id="start-button" class="btn btn-success">Start Scanning</button>
-                    <button id="stop-button" class="btn btn-danger d-none">Stop Scanning</button>
-                    <button id="toggle-camera-button" class="btn btn-warning d-none">Switch to Front Camera</button>
+                    <button id="stop-button" class="btn btn-danger d-none" style="display: none;">Stop Scanning</button>
                 </div>
             </div>
         </div>
@@ -51,78 +54,60 @@
         <script>
             const html5QrCode = new Html5Qrcode("reader");
             let scanning = false;
-            let isRearCamera = true;
-            let currentCameraId = null;
-            let devices = [];
 
             document.getElementById("start-button").addEventListener("click", () => {
-                Html5Qrcode.getCameras().then(camDevices => {
-                    devices = camDevices; // Simpan daftar perangkat kamera
+                // This method will trigger user permissions
+                Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
-                        currentCameraId = devices[0].id; // Gunakan kamera pertama
-                        startScanning(currentCameraId);
+                        var cameraId = devices[0].id;
+
+                        const config = {
+                            fps: 10
+                        }
+
+                        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                            /* handle success */
+                            document.getElementById("result").innerText =
+                                `Decoded text: ${decodedText}`;
+                        };
+
+                        html5QrCode.start({
+                            facingMode: {
+                                exact: "environment"
+                            }
+                        }, config, qrCodeSuccessCallback).then(() => {
+                            scanning = true;
+                            // Switch button display
+                            document.getElementById("start-button").classList.add('d-none');
+                            document.getElementById("stop-button").classList.remove('d-none');
+                            document.getElementById("placeholder").classList.add('d-none');
+                        }).catch(err => {
+                            // Start failed, handle the error
+                            document.getElementById("result").innerText =
+                                `Decoded text: ${err}`;
+                            document.getElementById("debug").innerText =
+                                `debug: ${JSON.stringify(devices, null, 2)}`;
+
+                        });
                     }
                 }).catch(err => {
-                    console.error(`Error fetching cameras: ${err}`);
+                    // handle err
                 });
             });
 
             document.getElementById("stop-button").addEventListener("click", () => {
                 if (scanning) {
-                    stopScanning();
+                    html5QrCode.stop().then(() => {
+                        scanning = false;
+                        // Switch button display back
+                        document.getElementById("start-button").classList.remove('d-none');
+                        document.getElementById("stop-button").classList.add('d-none');
+                        document.getElementById("placeholder").classList.remove('d-none');
+                    }).catch(err => {
+                        // Stop failed, handle the error
+                    });
                 }
             });
-
-            document.getElementById("toggle-camera-button").addEventListener("click", () => {
-                isRearCamera = !isRearCamera; // Ganti status kamera
-                const newCameraId = isRearCamera ? currentCameraId : getFrontCameraId(devices);
-                stopScanning().then(() => {
-                    startScanning(newCameraId);
-                });
-            });
-
-            function startScanning(cameraId) {
-                html5QrCode.start(
-                    cameraId, {
-                        facingMode: isRearCamera ? {
-                            exact: "environment"
-                        } : {
-                            exact: "environment"
-                        }
-                    },
-                    (decodedText, decodedResult) => {
-                        document.getElementById("result").innerText = `Decoded text: ${decodedText}`;
-                    },
-                    (errorMessage) => {
-                        console.warn(`QR Code scan error: ${errorMessage}`);
-                    }
-                ).then(() => {
-                    scanning = true;
-                    document.getElementById("start-button").classList.add('d-none');
-                    document.getElementById("stop-button").classList.remove('d-none');
-                    document.getElementById("toggle-camera-button").classList.remove('d-none');
-                    document.getElementById("placeholder").classList.add('d-none');
-                }).catch(err => {
-                    console.error(`Unable to start scanning: ${err}`);
-                });
-            }
-
-            function stopScanning() {
-                return html5QrCode.stop().then(() => {
-                    scanning = false;
-                    document.getElementById("start-button").classList.remove('d-none');
-                    document.getElementById("stop-button").classList.add('d-none');
-                    document.getElementById("toggle-camera-button").classList.add('d-none');
-                    document.getElementById("placeholder").classList.remove('d-none');
-                }).catch(err => {
-                    console.error(`Unable to stop scanning: ${err}`);
-                });
-            }
-
-            function getFrontCameraId(devices) {
-                const frontCamera = devices.find(device => device.label.toLowerCase().includes("front"));
-                return frontCamera ? frontCamera.id : devices[0].id; // Jika tidak ditemukan, gunakan kamera pertama
-            }
         </script>
     @endpush
 @endsection
