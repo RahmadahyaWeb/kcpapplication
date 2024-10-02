@@ -59,27 +59,24 @@
                 // This method will trigger user permissions
 
                 function getQrBoxSize() {
-                    // Check the width of the window and set qrbox size
+                    // Mengambil ukuran layar
                     const width = window.innerWidth;
-                    if (width < 768) { // Assuming 768px as the breakpoint for mobile
-                        return {
-                            width: 150,
-                            height: 150
-                        }; // Small size for small screens
-                    } else {
-                        return {
-                            width: 300,
-                            height: 300
-                        }; // Default size for larger screens
-                    }
-                }
+                    const height = window.innerHeight;
 
+                    // Menghitung ukuran QR box sebagai persentase dari ukuran layar
+                    const qrBoxSize = Math.min(width, height) * 0.25; // Misalnya 25% dari ukuran terkecil
+
+                    return {
+                        width: Math.max(qrBoxSize, 200), // Minimum size 200
+                        height: Math.max(qrBoxSize, 200) // Minimum size 200
+                    };
+                }
                 Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
                         var cameraId = devices[0].id;
 
                         const config = {
-                            aspectRatio: 1,
+                            // aspectRatio: 1,
                             qrbox: getQrBoxSize(),
                         }
 
