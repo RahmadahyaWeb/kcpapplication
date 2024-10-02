@@ -42,6 +42,24 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 
+    <style>
+        .placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            width: 100%;
+            background-color: #f8f9fa;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            color: #6c757d;
+            font-size: 1.5em;
+            padding: 20px;
+            box-sizing: border-box;
+            cursor: default;
+        }
+    </style>
+
     @livewireStyles
 </head>
 
@@ -87,7 +105,7 @@
     </div>
     <!-- / Layout wrapper -->
 
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="{{ asset('js/html5-qrcode.min.js') }}"></script>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->

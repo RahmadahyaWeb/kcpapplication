@@ -23,7 +23,8 @@
     </div>
 
     <!-- Modal SCAN-->
-    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -31,10 +32,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <video id="preview" class="img-fluid"></video>
+                    <div id="placeholder" class="placeholder">
+                        <p>Click "Start Scanning" to begin.</p>
+                    </div>
+
+                    <div id="reader" class="img-fluid"></div>
+
+                    <div id="result" class="mb-5 text-center"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="start-button" class="btn btn-success">Start Scanning</button>
+                    <button id="stop-button" class="btn btn-danger d-none" style="display: none;">Stop Scanning</button>
                 </div>
             </div>
         </div>
@@ -42,20 +50,52 @@
 
     @push('scripts')
         <script>
-            let scanner = new Instascan.Scanner({
-                video: document.getElementById('preview')
+            const html5QrCode = new Html5Qrcode("reader");
+            let scanning = false;
+
+            document.getElementById("start-button").addEventListener("click", () => {
+                Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length) {
+                        const cameraId = devices[0].id; // Use the first camera
+                        html5QrCode.start(
+                            cameraId, {
+                                facingMode: "environment" // Use rear camera if available
+                            },
+                            (decodedText, decodedResult) => {
+                                // Handle the result here
+                                document.getElementById("result").innerText =
+                                `Decoded text: ${decodedText}`;
+                            },
+                            (errorMessage) => {
+                                // Handle scanning error
+                            }
+                        ).then(() => {
+                            scanning = true;
+                            // Switch button display
+                            document.getElementById("start-button").classList.add('d-none');
+                            document.getElementById("stop-button").classList.remove('d-none');
+                            document.getElementById("placeholder").classList.add('d-none');
+                        }).catch(err => {
+                            // Start failed, handle the error
+                        });
+                    }
+                }).catch(err => {
+                    // Handle the error when fetching cameras
+                });
             });
-            scanner.addListener('scan', function(content) {
-                console.log(content);
-            });
-            Instascan.Camera.getCameras().then(function(cameras) {
-                if (cameras.length > 0) {
-                    scanner.start(cameras[0]);
-                } else {
-                    console.error('No cameras found.');
+
+            document.getElementById("stop-button").addEventListener("click", () => {
+                if (scanning) {
+                    html5QrCode.stop().then(() => {
+                        scanning = false;
+                        // Switch button display back
+                        document.getElementById("start-button").classList.remove('d-none');
+                        document.getElementById("stop-button").classList.add('d-none');
+                        document.getElementById("placeholder").classList.remove('d-none');
+                    }).catch(err => {
+                        // Stop failed, handle the error
+                    });
                 }
-            }).catch(function(e) {
-                console.error(e);
             });
         </script>
     @endpush
