@@ -57,14 +57,30 @@
 
             document.getElementById("start-button").addEventListener("click", () => {
                 // This method will trigger user permissions
+
+                function getQrBoxSize() {
+                    // Check the width of the window and set qrbox size
+                    const width = window.innerWidth;
+                    if (width < 768) { // Assuming 768px as the breakpoint for mobile
+                        return {
+                            width: 50,
+                            height: 50
+                        }; // Small size for small screens
+                    } else {
+                        return {
+                            width: 300,
+                            height: 300
+                        }; // Default size for larger screens
+                    }
+                }
+
                 Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) {
                         var cameraId = devices[0].id;
 
                         const config = {
-                            fps: 10,
                             aspectRatio: 1,
-                            qrbox : { width: 300, height: 300 }
+                            qrbox: getQrBoxSize(),
                         }
 
                         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
@@ -75,7 +91,7 @@
 
                         html5QrCode.start({
                             facingMode: {
-                                exact: "environment"
+                                exact: "user"
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;
