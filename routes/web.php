@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DksController;
+use App\Http\Controllers\MasterTokoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,9 @@ Route::middleware(['auth'])->group(function () {
 
     // DKS-SCAN
     Route::get('dks-scan', [DksController::class, 'index'])->name('dks.scan');
+
+    // MASTER TOKO
+    Route::get('master-toko', [MasterTokoController::class, 'index'])->name('master-toko.index');
 
     // LOGOUT
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
