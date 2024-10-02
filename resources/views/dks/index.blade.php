@@ -76,7 +76,7 @@
                         var cameraId = devices[0].id;
 
                         const config = {
-                            // aspectRatio: 1,
+                            aspectRatio: 1,
                             qrbox: getQrBoxSize(),
                         }
 
