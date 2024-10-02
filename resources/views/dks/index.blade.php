@@ -63,8 +63,8 @@
                     const width = window.innerWidth;
                     if (width < 768) { // Assuming 768px as the breakpoint for mobile
                         return {
-                            width: 50,
-                            height: 50
+                            width: 150,
+                            height: 150
                         }; // Small size for small screens
                     } else {
                         return {
@@ -91,7 +91,7 @@
 
                         html5QrCode.start({
                             facingMode: {
-                                exact: "user"
+                                exact: "environment"
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;
