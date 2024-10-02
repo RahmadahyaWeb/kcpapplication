@@ -87,7 +87,7 @@
                         facingMode: isRearCamera ? {
                             exact: "environment"
                         } : {
-                            exact: "user"
+                            exact: "environment"
                         }
                     },
                     (decodedText, decodedResult) => {
