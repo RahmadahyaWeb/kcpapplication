@@ -82,13 +82,17 @@
 
                         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
                             /* handle success */
-                            document.getElementById("result").innerText =
-                                `Decoded text: ${decodedText}`;
+
+                            const url = new URL(decodedText);
+                            const kd_toko = url.searchParams.get('kd_toko');
+
+                            const redirectUrl = `/dks-scan/${kd_toko}`;
+                            window.location.href = redirectUrl;
                         };
 
                         html5QrCode.start({
                             facingMode: {
-                                exact: "environment"
+                                exact: "user"
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;

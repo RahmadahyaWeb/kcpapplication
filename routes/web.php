@@ -23,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     // DKS-SCAN
-    Route::get('dks-scan', [DksController::class, 'index'])->name('dks.scan');
+    Route::get('dks-scan/{kd_toko?}', [DksController::class, 'index'])->name('dks.scan');
 
     // MASTER TOKO
     Route::get('master-toko', [MasterTokoController::class, 'index'])->name('master-toko.index');

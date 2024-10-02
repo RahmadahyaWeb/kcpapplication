@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 
 class DksController extends Controller
 {
-    public function index()
+    public function index($kd_toko = null)
     {
-        return view('dks.index');
+
+        if ($kd_toko) {
+            echo $kd_toko;
+        } else {
+            return view('dks.index');
+        }
     }
 }

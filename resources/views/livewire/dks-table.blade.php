@@ -11,13 +11,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>2024-10-01</td>
-                    <td>Berkah Tua</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>Oke</td>
-                </tr>
             </tbody>
         </table>
     </div>
