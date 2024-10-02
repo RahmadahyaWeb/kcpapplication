@@ -62,7 +62,9 @@
                         var cameraId = devices[0].id;
 
                         const config = {
-                            fps: 10
+                            fps: 10,
+                            aspectRatio: 1,
+                            qrbox : { width: 300, height: 300 }
                         }
 
                         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
@@ -73,7 +75,7 @@
 
                         html5QrCode.start({
                             facingMode: {
-                                exact: "environment"
+                                exact: "user"
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;

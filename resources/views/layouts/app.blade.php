@@ -58,6 +58,8 @@
             box-sizing: border-box;
             cursor: default;
         }
+
+        
     </style>
 
     @livewireStyles
