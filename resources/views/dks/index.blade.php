@@ -16,6 +16,7 @@
                     </a>
                 </div>
             </div>
+            <hr>
         </div>
         <div class="card-body">
             @if (session('error'))

@@ -26,17 +26,42 @@
                         <td>
                             @if ($item->latitude && $item->longitude)
                                 <a href="{{ generate_google_maps_link($item->latitude, $item->longitude) }}"
-                                    target="_blank">
-                                    Lihat Map
+                                    target="_blank" class="btn btn-sm btn-success">
+                                    <i class='bx bxs-map'></i>
                                 </a>
                             @endif
                         </td>
                         <td>
-                            <a href="">Edit</a>
+                            <div class="d-flex justify-content-start gap-2">
+                                <div class="d-grid ">
+                                    <a href="{{ route('master-toko.edit', $item->kd_toko) }}"
+                                        class="btn btn-sm btn-warning text-white">
+                                        <i class='bx bxs-edit'></i>
+                                        <div class="ms-1">
+                                            Edit
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="d-grid">
+                                    <a href="{{ route('master-toko.destroy', $item->kd_toko) }}"
+                                        class="btn btn-sm btn-danger text-white" data-confirm-delete="true">
+                                        <i class='bx bxs-trash-alt'></i>
+                                        <div class="ms-1">
+                                            Hapus
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+
+    <div class="mt-6">
+        {{ $items->links() }}
     </div>
 </div>

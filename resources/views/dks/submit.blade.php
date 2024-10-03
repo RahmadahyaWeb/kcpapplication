@@ -10,6 +10,7 @@
                     <b>DKS</b>
                 </div>
             </div>
+            <hr>
         </div>
         <div class="card-body">
             <div class="row">

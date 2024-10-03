@@ -28,6 +28,12 @@ Route::middleware(['auth'])->group(function () {
 
     // MASTER TOKO
     Route::get('master-toko', [MasterTokoController::class, 'index'])->name('master-toko.index');
+    Route::get('master-toko/create', [MasterTokoController::class, 'create'])->name('master-toko.create');
+    Route::post('master-toko/store', [MasterTokoController::class, 'store'])->name('master-toko.store');
+    Route::get('master-toko/edit/{kd_toko}', [MasterTokoController::class, 'edit'])->name('master-toko.edit');
+    Route::put('master-toko/update/{kd_toko}', [MasterTokoController::class, 'update'])->name('master-toko.update');
+    Route::delete('master-toko/destroy/{kd_toko}', [MasterTokoController::class, 'destroy'])->name('master-toko.destroy');
+
 
     // LOGOUT
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');

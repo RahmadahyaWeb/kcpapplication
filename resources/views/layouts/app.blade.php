@@ -59,13 +59,28 @@
             cursor: default;
         }
 
-        
+        .swal2-container {
+            z-index: 9999 !important;
+            /* Pastikan nilai ini lebih tinggi dari elemen lain */
+        }
+
+        /* Jika diperlukan, Anda juga dapat mengatur z-index untuk backdrop */
+        .swal2-backdrop {
+            z-index: 9998 !important;
+        }
+
+        /* Jika Anda ingin mengatur z-index untuk popup itu sendiri */
+        .swal2-popup {
+            z-index: 10000 !important;
+            /* Ini harus lebih tinggi dari container dan backdrop */
+        }
     </style>
 
     @livewireStyles
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">

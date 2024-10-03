@@ -2999,7 +2999,7 @@ textarea.form-control-lg {
   background-repeat: no-repeat;
   background-position: right 0.9375rem center;
   background-size: 22px 24px;
-  border: var(--bs-border-width) solid #ced1d5;
+  border: 2px solid #ced1d5;
   border-radius: var(--bs-border-radius);
   -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -5303,7 +5303,7 @@ textarea.form-control-lg {
   margin-left: 0.375rem;
 }
 .page-item .page-link {
-  border-radius: var(--bs-pagination-border-radius);
+  /* border-radius: var(--bs-pagination-border-radius); */
 }
 
 .pagination-lg {
@@ -10306,7 +10306,7 @@ li:not(:first-child) .dropdown-item, .dropdown-menu .dropdown-item:not(:first-ch
 }
 .form-select:focus {
   border-width: 2px;
-  padding: calc(0.543rem - 2px) calc(2.8125rem - 2px) calc(0.543rem - 2px) calc(0.9375rem - 2px);
+  /* padding: calc(0.543rem - 2px) calc(2.8125rem - 2px) calc(0.543rem - 2px) calc(0.9375rem - 2px); */
   background-position: right calc(0.9375rem - 1px) center;
 }
 .form-select.form-select-lg {
