@@ -101,6 +101,9 @@ class DksController extends Controller
                         'updated_at'        => now(),
                     ]
                 );
+
+            return redirect()->back()->with('success', "Berhasil melakukan check $type");
+            
         } else {
             return redirect()->back()->with('error', 'Lokasi tidak ditemukan!');
         }
