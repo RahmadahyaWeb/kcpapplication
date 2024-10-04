@@ -62,6 +62,7 @@
             var tokoLatitude = {{ $toko->latitude }};
             var tokoLongitude = {{ $toko->longitude }};
             var radiusToko = 50;
+            var userMarker;
 
             var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -82,6 +83,10 @@
 
             // Function to update the map with user location
             function updateMap(latitude, longitude) {
+                if (userMarker) {
+                    map.removeLayer(userMarker);
+                }
+
                 // Circle for the store's location
                 let circleStore = L.circle([tokoLatitude, tokoLongitude], {
                     color: 'red',
