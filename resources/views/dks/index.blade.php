@@ -33,7 +33,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="placeholder" class="placeholder">
+                    <div id="placeholder" class="placeholder text-center">
                         <p>Click "Start Scanning" to begin.</p>
                     </div>
 
