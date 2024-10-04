@@ -63,6 +63,7 @@
             var tokoLongitude = {{ $toko->longitude }};
             var radiusToko = 50;
             var userMarker;
+            var userCircle;
             
             var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -88,6 +89,10 @@
                     map.removeLayer(userMarker);
                 }
 
+                if (userCircle) {
+                    map.removeLayer(userCircle);
+                }
+
                 // Circle for the store's location
                 let circleStore = L.circle([tokoLatitude, tokoLongitude], {
                     color: 'red',
@@ -102,11 +107,11 @@
                     .openPopup();
 
                 // Circle for user's location
-                let userCircle = L.circle([latitude, longitude], {
+                userCircle = L.circle([latitude, longitude], {
                     color: 'blue',
                     fillColor: '#30f',
                     fillOpacity: 0.5,
-                    radius: 10
+                    radius: 5
                 }).addTo(map);
 
                 map.fitBounds(userCircle.getBounds());
