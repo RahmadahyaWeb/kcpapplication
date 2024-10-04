@@ -102,8 +102,7 @@ class DksController extends Controller
                     ]
                 );
 
-            return redirect()->back()->with('success', "Berhasil melakukan check $type");
-            
+            return redirect()->route('dks.scan')->with('success', "Berhasil melakukan check $type");
         } else {
             return redirect()->back()->with('error', 'Lokasi tidak ditemukan!');
         }
