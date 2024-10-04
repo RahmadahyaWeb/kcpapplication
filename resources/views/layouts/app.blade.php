@@ -80,6 +80,8 @@
             z-index: 10000 !important;
             /* Ini harus lebih tinggi dari container dan backdrop */
         }
+
+        #map { height: 200px; }
     </style>
 
     @livewireStyles
