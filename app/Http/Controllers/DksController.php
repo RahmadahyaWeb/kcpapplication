@@ -76,8 +76,6 @@ class DksController extends Controller
             ->whereDate('tgl_kunjungan', '=', now()->toDateString())
             ->count();
 
-        $check = 2;
-
         if ($check == 0) {
             $type = 'in';
         } else if ($check == 2) {
