@@ -7,6 +7,7 @@
                     <th>Toko</th>
                     <th>Check In</th>
                     <th>Check Out</th>
+                    <th>Lama Kunjungan</th>
                     <th>Keterangan</th>
                 </tr>
             </thead>

@@ -11,6 +11,8 @@ class MasterTokoTable extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $nama_toko = '';
+
     public function search()
     {
         $this->resetPage();
@@ -26,6 +28,8 @@ class MasterTokoTable extends Component
                 'latitude',
                 'longitude'
             ])
+            ->where('master_toko.nama_toko', 'like', '%' . $this->nama_toko . '%')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return view('livewire.master-toko-table', compact('items'));

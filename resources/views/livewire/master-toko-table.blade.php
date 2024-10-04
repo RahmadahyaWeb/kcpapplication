@@ -6,6 +6,13 @@
         }
     @endphp
 
+    <div class="col-md-6 mb-3">
+        <form wire:submit="search">
+            <label class="form-label">Nama Toko</label>
+            <input id="nama_toko" type="text" class="form-control" wire:model.live="nama_toko" placeholder="Cari berdasarkan nama toko">
+        </form>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover table-bordered table-sm">
             <thead>

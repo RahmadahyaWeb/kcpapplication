@@ -19,11 +19,6 @@
             <hr>
         </div>
         <div class="card-body">
-            @if (session('error'))
-                <div class="alert alert-danger mb-3" role="alert">
-                    {{ session('error') }}
-                </div>
-            @endif
             @livewire('dks-table')
         </div>
     </div>
@@ -83,13 +78,16 @@
                         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
                             const url = new URL(decodedText);
                             const kd_toko = url.searchParams.get('kd_toko');
-                            const redirectUrl = `/dks-scan/${kd_toko}`;
+                            const encrypted = btoa(kd_toko);
+                            const redirectUrl = `/dks-scan/${encrypted}`;
+
                             window.location.href = redirectUrl;
                         };
 
                         html5QrCode.start({
                             facingMode: {
-                                exact: "environment"
+                                // exact: "environment"
+                                exact: "user"
                             }
                         }, config, qrCodeSuccessCallback).then(() => {
                             scanning = true;
