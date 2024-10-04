@@ -97,7 +97,7 @@
                 let circleStore = L.circle([tokoLatitude, tokoLongitude], {
                     color: 'red',
                     fillColor: '#f03',
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.2,
                     radius: radiusToko
                 }).addTo(map);
 
