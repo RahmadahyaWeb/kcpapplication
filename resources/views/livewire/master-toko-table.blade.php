@@ -7,10 +7,9 @@
     @endphp
 
     <div class="col-md-6 mb-3">
-        <form wire:submit="search">
-            <label class="form-label">Nama Toko</label>
-            <input id="nama_toko" type="text" class="form-control" wire:model.live="nama_toko" placeholder="Cari berdasarkan nama toko">
-        </form>
+        <label class="form-label">Nama / Kode Toko</label>
+        <input id="toko" type="text" class="form-control" wire:model.live="toko"
+            placeholder="Cari berdasarkan nama / kode toko">
     </div>
 
     <div class="table-responsive">
@@ -25,44 +24,47 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($items as $item)
+                @if ($items->isEmpty())
                     <tr>
-                        <td class="text-uppercase">{{ $item->kd_toko }}</td>
-                        <td>{{ $item->nama_toko }}</td>
-                        <td>{{ $item->alamat }}</td>
-                        <td>
-                            @if ($item->latitude && $item->longitude)
-                                <a href="{{ generate_google_maps_link($item->latitude, $item->longitude) }}"
-                                    target="_blank" class="btn btn-sm btn-success">
-                                    <i class='bx bxs-map'></i>
-                                </a>
-                            @endif
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-start gap-2">
-                                <div class="d-grid ">
-                                    <a href="{{ route('master-toko.edit', $item->kd_toko) }}"
-                                        class="btn btn-sm btn-warning text-white">
-                                        <i class='bx bxs-edit'></i>
-                                        <div class="ms-1">
-                                            Edit
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="d-grid">
-                                    <a href="{{ route('master-toko.destroy', $item->kd_toko) }}"
-                                        class="btn btn-sm btn-danger text-white" data-confirm-delete="true">
-                                        <i class='bx bxs-trash-alt'></i>
-                                        <div class="ms-1">
-                                            Hapus
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </td>
+                        <td colspan="5" class="text-center">No data</td>
                     </tr>
-                @endforeach
+                @else
+                    @foreach ($items as $item)
+                        <tr>
+                            <td class="text-uppercase">{{ $item->kd_toko }}</td>
+                            <td>{{ $item->nama_toko }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>
+                                @if ($item->latitude && $item->longitude)
+                                    <a href="{{ generate_google_maps_link($item->latitude, $item->longitude) }}"
+                                        target="_blank" class="btn btn-sm btn-success">
+                                        <i class='bx bxs-map'></i>
+                                    </a>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-start gap-2">
+                                    <div class="d-grid">
+                                        <a href="{{ route('master-toko.edit', $item->kd_toko) }}"
+                                            class="btn btn-sm btn-warning text-white">
+                                            <i class='bx bxs-edit'></i>
+                                            <div class="ms-1">Edit</div>
+                                        </a>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <a href="{{ route('master-toko.destroy', $item->kd_toko) }}"
+                                            class="btn btn-sm btn-danger text-white" data-confirm-delete="true">
+                                            <i class='bx bxs-trash-alt'></i>
+                                            <div class="ms-1">Hapus</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+
             </tbody>
         </table>
     </div>
