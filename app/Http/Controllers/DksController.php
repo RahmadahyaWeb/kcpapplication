@@ -28,6 +28,8 @@ class DksController extends Controller
                 ->select([
                     'kd_toko',
                     'nama_toko',
+                    'latitude',
+                    'longitude'
                 ])
                 ->where('kd_toko', $kd_toko)
                 ->first();
@@ -63,14 +65,6 @@ class DksController extends Controller
             ->where('kd_toko', $kd_toko)
             ->first();
 
-        // var_dump([
-        //     'latitude_user' => $latitude,
-        //     'longitude_user' => $longitude,
-        //     'lat_toko' => $lokasi_toko->latitude,
-        //     'long_toko' => $lokasi_toko->longitude
-        // ]);
-
-        // exit;
         // JARAK DALAM METER
         $distance = $this->getDistanceBetweenPoints($latitude, $longitude, $lokasi_toko->latitude, $lokasi_toko->longitude);
 
@@ -80,7 +74,7 @@ class DksController extends Controller
             echo 'boleh absen';
         }
 
-        dd($distance);
+        exit;
 
         if ($latitude && $longitude) {
             DB::table('trns_dks')
