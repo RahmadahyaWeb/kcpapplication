@@ -27,14 +27,16 @@
                     <div id="map"></div>
                 </div>
 
-                <form action="{{ route('dks.store', $toko->kd_toko) }}" method="POST">
+                <form action="{{ route('dks.store', $toko->kd_toko) }}" method="POST" onclick="return validateForm(event)">
                     @csrf
                     <input type="hidden" name="latitude" id="latitude">
                     <input type="hidden" name="longitude" id="longitude">
+                    <input type="hidden" name="distance" id="distance">
 
                     <div class="col-12 mb-3">
                         <label for="status" class="form-label">Status</label>
-                        <input type="text" class="form-control" id="status" name="status">
+                        <input type="text" class="form-control" id="status" name="status"
+                            value="Lokasi tidak terdeteksi." disabled>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -67,51 +69,57 @@
                 maxZoom: 18,
             }).addTo(map);
 
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(position => {
-                    latitude = position.coords.latitude;
-                    longitude = position.coords.longitude;
-                    accuracy = position.coords.accuracy;
+            // Function to get user location
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.watchPosition(position => {
+                        updateMap(position.coords.latitude, position.coords.longitude);
+                    }, showError);
+                } else {
+                    alert("Geolokasi tidak didukung oleh browser ini.");
+                }
+            }
 
-                    let circleStore = L.circle([tokoLatitude, tokoLongitude], {
-                        color: 'red',
-                        fillColor: '#f03',
-                        fillOpacity: 0.5,
-                        radius: 50
-                    }).addTo(map);
+            // Function to update the map with user location
+            function updateMap(latitude, longitude) {
+                // Circle for the store's location
+                let circleStore = L.circle([tokoLatitude, tokoLongitude], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: radiusToko
+                }).addTo(map);
 
-                    // Menambahkan marker untuk lokasi pengguna
-                    let userMarker = L.marker([latitude, longitude]).addTo(map)
-                        .bindPopup(`{{ Auth::user()->username }}`)
-                        .openPopup();
+                // Marker for user's location
+                let userMarker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup(`{{ Auth::user()->username }}`)
+                    .openPopup();
 
-                    // Menambahkan circle untuk lokasi pengguna
-                    let userCircle = L.circle([latitude, longitude], {
-                        color: 'blue',
-                        fillColor: '#30f',
-                        fillOpacity: 0.5,
-                        radius: 10
-                    }).addTo(map);
+                // Circle for user's location
+                let userCircle = L.circle([latitude, longitude], {
+                    color: 'blue',
+                    fillColor: '#30f',
+                    fillOpacity: 0.5,
+                    radius: 10
+                }).addTo(map);
 
-                    map.fitBounds(userCircle.getBounds())
+                map.fitBounds(userCircle.getBounds());
 
-                    document.getElementById('latitude').value = latitude;
-                    document.getElementById('longitude').value = longitude;
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
 
+                // Calculate distance
+                var userLocation = L.latLng(latitude, longitude);
+                var storeLocation = L.latLng(tokoLatitude, tokoLongitude);
+                var distance = userLocation.distanceTo(storeLocation);
 
-                    // MENGHITUNG JARAK
-                    var userLocation = L.latLng(latitude, longitude);
-                    var storeLocation = L.latLng(tokoLatitude, tokoLongitude);
-                    var distance = userLocation.distanceTo(storeLocation);
+                document.getElementById('distance').value = distance;
 
-                    if (distance <= radiusToko) {
-                        document.getElementById('status').value = 'Berada di dalam radius';
-                    } else {
-                        document.getElementById('status').value = 'Berada di luar radius';
-                    }
-                }, showError);
-            } else {
-                alert("Geolokasi tidak didukung oleh browser ini.");
+                if (distance <= radiusToko) {
+                    document.getElementById('status').value = 'Berada di dalam radius toko';
+                } else {
+                    document.getElementById('status').value = 'Berada di luar radius toko';
+                }
             }
 
             function showError(error) {
@@ -130,6 +138,25 @@
                         break;
                 }
             }
+
+            function validateForm(event) {
+                getLocation();
+
+                distance = document.getElementById('distance').value;
+                latitude = document.getElementById('latitude').value;
+                longitude = document.getElementById('longitude').value;
+
+                if (!distance || !latitude || !longitude) {
+                    alert("Lokasi tidak terdeteksi.");
+                    event.preventDefault();
+                    return false;
+                }
+
+                return true;
+
+            }
+
+            getLocation();
         </script>
     @endpush
 @endsection

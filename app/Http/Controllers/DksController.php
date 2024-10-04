@@ -20,7 +20,6 @@ class DksController extends Controller
     public function index($kd_toko = null)
     {
         if ($kd_toko) {
-
             // DECODE
             $kd_toko = base64_decode($kd_toko);
 
@@ -49,66 +48,63 @@ class DksController extends Controller
         /**
          * VALIDASI LATITUDE DAN LONGITUDE
          * VALIDASI LOKASI USER DAN LOKASI TOKO
-         * VALIDASI MAX 3X SCAN PER TOKO DALAM SATU HARI
+         * VALIDASI MAX 2X SCAN PER TOKO DALAM SATU HARI
          * VALIDASI JIKA BELUM CHECKIN DI TOKO TERSEBUT HARI INI MAKA TYPE = IN, 
          * VALIDASI JIKA SUDAH CHECKIN DI TOKO TERSEBUT HARI INI MAKA TYPE = OUT
          * VALIDASI JIKA KETERANGAN = 'IST/ist' MAKA TYPE = OUT
          */
 
-        //  LOKASI USER
+        // DATA USER
         $latitude   = $request->latitude;
         $longitude  = $request->longitude;
+        $user       = Auth::user()->username;
 
-        // LOKASI TOKO
-        $lokasi_toko = DB::table('master_toko')
-            ->select(['nama_toko', 'latitude', 'longitude'])
-            ->where('kd_toko', $kd_toko)
-            ->first();
+        // JARAK ANTARA USER DENGAN TOKO DALAM METER
+        $distance = $request->distance;
 
-        // JARAK DALAM METER
-        $distance = $this->getDistanceBetweenPoints($latitude, $longitude, $lokasi_toko->latitude, $lokasi_toko->longitude);
-
+        // VALIDASI JARAK ANTARA USER DENGAN TOKO
         if ($distance > 50) {
-            echo 'tidak boleh absen';
-        } else {
-            echo 'boleh absen';
+            return redirect()->back()->with('error', 'Anda berada di luar radius toko!');
         }
 
-        exit;
+        // VALIDASI CHECK IN / CHECK OUT
+        $type = '';
+
+        $check = DB::table('trns_dks')
+            ->where('kd_toko', $kd_toko)
+            ->where('user_sales', $user)
+            ->whereDate('tgl_kunjungan', '=', now()->toDateString())
+            ->count();
+
+        $check = 2;
+
+        if ($check == 0) {
+            $type = 'in';
+        } else if ($check == 2) {
+            return redirect()->back()->with('error', 'Anda sudah melakukan check out!');
+        } else {
+            $type = 'out';
+        }
 
         if ($latitude && $longitude) {
             DB::table('trns_dks')
                 ->insert(
                     [
                         'tgl_kunjungan'     => now(),
-                        'user_sales'        => Auth::user()->username,
+                        'user_sales'        => $user,
                         'kd_toko'           => $kd_toko,
                         'waktu_kunjungan'   => now(),
+                        'type'              => $type,
                         'latitude'          => $latitude,
                         'longitude'         => $longitude,
                         'keterangan'        => $request->keterangan,
-                        'created_by'        => Auth::user()->username,
+                        'created_by'        => $user,
                         'created_at'        => now(),
                         'updated_at'        => now(),
                     ]
                 );
         } else {
-            return redirect()->back()->with('error', 'Lokasi tidak ditemukan');
+            return redirect()->back()->with('error', 'Lokasi tidak ditemukan!');
         }
-    }
-
-    public function getDistanceBetweenPoints($lat1, $lon1, $lat2, $lon2)
-    {
-        $theta = $lon1 - $lon2;
-        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
-        $miles = acos($miles);
-        $miles = rad2deg($miles);
-        $miles = $miles * 60 * 1.1515;
-        $feet = $miles * 5280;
-        $yards = $feet / 3;
-        $kilometers = $miles * 1.609344;
-        $meters = $kilometers * 1000;
-
-        return $meters;
     }
 }
