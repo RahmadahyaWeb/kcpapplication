@@ -47,7 +47,6 @@ class DksController extends Controller
     {
         /**
          * VALIDASI LATITUDE DAN LONGITUDE
-         * VALIDASI LOKASI USER DAN LOKASI TOKO
          * VALIDASI MAX 2X SCAN PER TOKO DALAM SATU HARI
          * VALIDASI JIKA BELUM CHECKIN DI TOKO TERSEBUT HARI INI MAKA TYPE = IN, 
          * VALIDASI JIKA SUDAH CHECKIN DI TOKO TERSEBUT HARI INI MAKA TYPE = OUT
@@ -57,6 +56,7 @@ class DksController extends Controller
         // DATA USER
         $latitude   = $request->latitude;
         $longitude  = $request->longitude;
+        $keterangan = strtolower($request->keterangan);
         $user       = Auth::user()->username;
 
         // JARAK ANTARA USER DENGAN TOKO DALAM METER
@@ -80,6 +80,8 @@ class DksController extends Controller
             $type = 'in';
         } else if ($check == 2) {
             return redirect()->back()->with('error', 'Anda sudah melakukan check out!');
+        } else if ($keterangan == 'ist'){
+            $type = 'out';
         } else {
             $type = 'out';
         }
@@ -95,7 +97,7 @@ class DksController extends Controller
                         'type'              => $type,
                         'latitude'          => $latitude,
                         'longitude'         => $longitude,
-                        'keterangan'        => $request->keterangan,
+                        'keterangan'        => $keterangan,
                         'created_by'        => $user,
                         'created_at'        => now(),
                         'updated_at'        => now(),

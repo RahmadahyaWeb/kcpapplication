@@ -34,7 +34,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('master-toko/update/{kd_toko}', [MasterTokoController::class, 'update'])->name('master-toko.update');
     Route::delete('master-toko/destroy/{kd_toko}', [MasterTokoController::class, 'destroy'])->name('master-toko.destroy');
 
-
     // LOGOUT
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
