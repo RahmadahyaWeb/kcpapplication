@@ -7,7 +7,7 @@
         <div class="card-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <b>DKS Monitoring</b>
+                    <b>DKS Monitoring ({{ $today = \Carbon\Carbon::now()->format('d-m-Y') }})</b>
                 </div>
                 <div class="col d-flex justify-content-end">
                     <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -20,6 +20,12 @@
         </div>
         <div class="card-body">
             @livewire('dks-table')
+        </div>
+        <div class="card-footer">
+            <small>
+                NB: sebelum ingin istirahat, harus menuliskan keterangan <b>IST/ist</b> saat checkout di toko sebelum
+                istirahat.
+            </small>
         </div>
     </div>
 
@@ -46,7 +52,6 @@
                         <button id="stop-button" class="btn btn-danger d-none" style="display: none;">Stop Scanning</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -80,7 +80,7 @@ class DksController extends Controller
             $type = 'in';
         } else if ($check == 2) {
             return redirect()->back()->with('error', 'Anda sudah melakukan check out!');
-        } else if ($keterangan == 'ist'){
+        } else if ($keterangan == 'ist') {
             $type = 'out';
         } else {
             $type = 'out';
