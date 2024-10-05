@@ -64,6 +64,7 @@
             var radiusToko = 50;
             var userMarker;
             var userCircle;
+            var locationFetched = false;
 
             // First initialization
             var map = L.map('map').setView([51.505, -0.09], 13);
@@ -152,7 +153,9 @@
                 }
             }
 
-            function success(pos) {}
+            function success(pos) {
+                locationFetched = false;
+            }
 
             function validateForm(event) {
                 getLocation();
