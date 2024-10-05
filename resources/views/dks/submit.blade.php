@@ -152,6 +152,8 @@
                 }
             }
 
+            function success(pos) {}
+
             function validateForm(event) {
                 getLocation();
 
@@ -159,6 +161,12 @@
                     alert("GPS tidak aktif. Mohon aktifkan GPS Anda.");
                     event.preventDefault();
                     return false;
+                }
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(success, showError)
+                } else {
+                    alert("Geolokasi tidak didukung oleh browser ini.");
                 }
 
                 distance = document.getElementById('distance').value;
