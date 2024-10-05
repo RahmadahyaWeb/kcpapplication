@@ -40,8 +40,20 @@
                             <td>{{ $formattedDate }}</td>
                             <td>{{ $item->nama_toko }}</td>
                             <td>{{ date('H:i:s', strtotime($item->waktu_cek_in)) }}</td>
-                            <td>{{ date('H:i:s', strtotime($item->waktu_cek_out)) }}</td>
-                            <td>{{ $item->lama_kunjungan }} menit</td>
+                            <td>
+                                @if ($item->waktu_cek_out)
+                                    {{ date('H:i:s', strtotime($item->waktu_cek_out)) }}
+                                @else
+                                    Belum check out
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->lama_kunjungan)
+                                    {{ $item->lama_kunjungan }} menit
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $item->keterangan }}</td>
                         </tr>
                     @endforeach
