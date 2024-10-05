@@ -160,16 +160,17 @@
             function validateForm(event) {
                 getLocation();
 
-                if (!locationFetched) {
-                    alert("GPS tidak aktif. Mohon aktifkan GPS Anda.");
-                    event.preventDefault();
-                    return false;
-                }
-
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(success, showError)
                 } else {
                     alert("Geolokasi tidak didukung oleh browser ini.");
+                }
+
+                if (!locationFetched) {
+                    alert("GPS tidak aktif. Mohon aktifkan GPS Anda.");
+                    event.preventDefault();
+                    location.reload();
+                    return false;
                 }
 
                 distance = document.getElementById('distance').value;
@@ -179,6 +180,7 @@
                 if (!distance || !latitude || !longitude) {
                     alert("Lokasi tidak terdeteksi.");
                     event.preventDefault();
+                    location.reload();
                     return false;
                 }
 
