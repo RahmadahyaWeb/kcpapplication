@@ -64,7 +64,7 @@
             var radiusToko = 50;
             var userMarker;
             var userCircle;
-            
+
             // First initialization
             var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -76,6 +76,7 @@
             function getLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.watchPosition(position => {
+                        locationFetched = true;
                         updateMap(position.coords.latitude, position.coords.longitude);
                     }, showError);
                 } else {
@@ -134,6 +135,7 @@
             }
 
             function showError(error) {
+                locationFetched = false;
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
                         alert("User menolak permintaan geolokasi.");
@@ -152,6 +154,12 @@
 
             function validateForm(event) {
                 getLocation();
+
+                if (!locationFetched) {
+                    alert("GPS tidak aktif. Mohon aktifkan GPS Anda.");
+                    event.preventDefault();
+                    return false;
+                }
 
                 distance = document.getElementById('distance').value;
                 latitude = document.getElementById('latitude').value;
