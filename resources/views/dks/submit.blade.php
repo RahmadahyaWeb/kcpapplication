@@ -71,18 +71,21 @@
                 maxZoom: 19,
             }).addTo(map);
 
-            map.locate({
-                setView: true,
-                maxZoom: 16,
-                enableHighAccuracy: true,
-                watch: true 
-            });
+            setInterval(function() {
+                map.locate({
+                    setView: true,
+                    maxZoom: 16,
+                    enableHighAccuracy: true,
+                });
+            }, 3000);
 
             function onLocationFound(e) {
                 L.marker(e.latlng).addTo(map)
                     .bindPopup("{{ Auth::user()->username }}").openPopup();
 
                 L.circle(e.latlng, radiusToko).addTo(map);
+
+                console.log(e)
             }
 
             function onLocationError(e) {
