@@ -73,14 +73,16 @@
 
             map.locate({
                 setView: true,
-                maxZoom: 16
+                maxZoom: 16,
+                enableHighAccuracy: true,
+                watch: true 
             });
 
             function onLocationFound(e) {
                 L.marker(e.latlng).addTo(map)
                     .bindPopup("{{ Auth::user()->username }}").openPopup();
 
-                L.circle(e.latlng, radius).addTo(map);
+                L.circle(e.latlng, radiusToko).addTo(map);
             }
 
             function onLocationError(e) {
@@ -90,51 +92,6 @@
             map.on('locationfound', onLocationFound);
 
             map.on('locationerror', onLocationError);
-
-            // function handlePermission() {
-            //     navigator.permissions.query({
-            //         name: "geolocation"
-            //     }).then((result) => {
-            //         if (result.state === "granted") {
-            //             report(result.state);
-            //             navigator.geolocation.getCurrentPosition(showPosition);
-            //         } else if (result.state === "prompt") {
-            //             report(result.state);
-            //             geoBtn.style.display = "none";
-            //             navigator.geolocation.getCurrentPosition(
-            //                 revealPosition,
-            //                 positionDenied,
-            //                 geoSettings
-            //             );
-            //         } else if (result.state === "denied") {
-            //             report(result.state);
-            //         }
-
-            //         result.addEventListener("change", () => {
-            //             report(result.state);
-            //         });
-            //     });
-            // }
-
-            // function report(state) {
-            //     if (state === "granted") {
-            //         console.log(`Permission granted`);
-            //     } else if (state === "denied") {
-            //         console.log(`Permission denied`);
-            //     } else {
-            //         console.log(`Permission prompt`);
-            //     }
-            // }
-
-            // function showPosition(position) {
-            //     console.log(position);
-            // }
-
-            // function positionDenied(error) {
-            //     console.error(`Error getting position: ${error.message}`);
-            // }
-
-            // handlePermission();
         </script>
     @endpush
 @endsection
