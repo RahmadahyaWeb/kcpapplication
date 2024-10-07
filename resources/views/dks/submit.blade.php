@@ -64,130 +64,77 @@
             var radiusToko = 50;
             var userMarker;
             var userCircle;
-            var locationFetched = false;
 
-            // First initialization
-            var map = L.map('map').setView([51.505, -0.09], 13);
+            var map = L.map('map').fitWorld();
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
+                maxZoom: 19,
             }).addTo(map);
 
-            // Function to get user location
-            function getLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.watchPosition(position => {
-                        locationFetched = true;
-                        updateMap(position.coords.latitude, position.coords.longitude);
-                    }, showError);
-                } else {
-                    alert("Geolokasi tidak didukung oleh browser ini.");
-                }
+            map.locate({
+                setView: true,
+                maxZoom: 16
+            });
+
+            function onLocationFound(e) {
+                L.marker(e.latlng).addTo(map)
+                    .bindPopup("{{ Auth::user()->username }}").openPopup();
+
+                L.circle(e.latlng, radius).addTo(map);
             }
 
-            // Function to update the map with user location
-            function updateMap(latitude, longitude) {
-                if (userMarker) {
-                    map.removeLayer(userMarker);
-                }
-
-                if (userCircle) {
-                    map.removeLayer(userCircle);
-                }
-
-                // Circle for the store's location
-                let circleStore = L.circle([tokoLatitude, tokoLongitude], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.2,
-                    radius: radiusToko
-                }).addTo(map);
-
-                // Marker for user's location
-                userMarker = L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup(`{{ Auth::user()->username }}`)
-                    .openPopup();
-
-                // Circle for user's location
-                userCircle = L.circle([latitude, longitude], {
-                    color: 'blue',
-                    fillColor: '#30f',
-                    fillOpacity: 0.5,
-                    radius: 5
-                }).addTo(map);
-
-                map.fitBounds(userCircle.getBounds());
-
-                document.getElementById('latitude').value = latitude;
-                document.getElementById('longitude').value = longitude;
-
-                // Calculate distance
-                var userLocation = L.latLng(latitude, longitude);
-                var storeLocation = L.latLng(tokoLatitude, tokoLongitude);
-                var distance = userLocation.distanceTo(storeLocation);
-
-                document.getElementById('distance').value = distance;
-
-                if (distance <= radiusToko) {
-                    document.getElementById('status').value = 'Berada di dalam radius toko';
-                } else {
-                    document.getElementById('status').value = 'Berada di luar radius toko';
-                }
+            function onLocationError(e) {
+                alert(e.message);
             }
 
-            function showError(error) {
-                locationFetched = false;
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert("User menolak permintaan geolokasi.");
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert("Posisi tidak tersedia.");
-                        break;
-                    case error.TIMEOUT:
-                        alert("Permintaan geolokasi waktu habis.");
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert("Terjadi kesalahan.");
-                        break;
-                }
-            }
+            map.on('locationfound', onLocationFound);
 
-            function success(pos) {
-                locationFetched = false;
-            }
+            map.on('locationerror', onLocationError);
 
-            function validateForm(event) {
-                getLocation();
+            // function handlePermission() {
+            //     navigator.permissions.query({
+            //         name: "geolocation"
+            //     }).then((result) => {
+            //         if (result.state === "granted") {
+            //             report(result.state);
+            //             navigator.geolocation.getCurrentPosition(showPosition);
+            //         } else if (result.state === "prompt") {
+            //             report(result.state);
+            //             geoBtn.style.display = "none";
+            //             navigator.geolocation.getCurrentPosition(
+            //                 revealPosition,
+            //                 positionDenied,
+            //                 geoSettings
+            //             );
+            //         } else if (result.state === "denied") {
+            //             report(result.state);
+            //         }
 
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(success, showError)
-                } else {
-                    alert("Geolokasi tidak didukung oleh browser ini.");
-                }
+            //         result.addEventListener("change", () => {
+            //             report(result.state);
+            //         });
+            //     });
+            // }
 
-                if (!locationFetched) {
-                    alert("GPS tidak aktif. Mohon aktifkan GPS Anda.");
-                    event.preventDefault();
-                    location.reload();
-                    return false;
-                }
+            // function report(state) {
+            //     if (state === "granted") {
+            //         console.log(`Permission granted`);
+            //     } else if (state === "denied") {
+            //         console.log(`Permission denied`);
+            //     } else {
+            //         console.log(`Permission prompt`);
+            //     }
+            // }
 
-                distance = document.getElementById('distance').value;
-                latitude = document.getElementById('latitude').value;
-                longitude = document.getElementById('longitude').value;
+            // function showPosition(position) {
+            //     console.log(position);
+            // }
 
-                if (!distance || !latitude || !longitude) {
-                    alert("Lokasi tidak terdeteksi.");
-                    event.preventDefault();
-                    location.reload();
-                    return false;
-                }
+            // function positionDenied(error) {
+            //     console.error(`Error getting position: ${error.message}`);
+            // }
 
-                return true;
-            }
-
-            getLocation();
+            // handlePermission();
         </script>
     @endpush
 @endsection
