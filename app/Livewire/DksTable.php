@@ -67,8 +67,8 @@ class DksTable extends Component
                 })
                 ->leftJoin('master_toko', 'in_data.kd_toko', '=', 'master_toko.kd_toko')
                 ->where('in_data.type', 'in')
-                ->orderBy('in_data.created_at')
-                ->paginate(1);
+                ->orderBy('in_data.created_at', 'desc')
+                ->paginate(15);
         }
 
         return view('livewire.dks-table', compact('items'));
