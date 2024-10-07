@@ -20,7 +20,6 @@ class DksController extends Controller
     public function index($kd_toko = null)
     {
         if ($kd_toko) {
-            // DECODE
             $kd_toko = base64_decode($kd_toko);
 
             $toko = DB::table('master_toko')

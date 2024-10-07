@@ -64,6 +64,7 @@
             var radiusToko = 50;
             var userMarker;
             var userCircle;
+            var hasErrorAlerted = false;
 
             var map = L.map('map', {
                 center: [tokoLatitude, tokoLongitude],
@@ -73,6 +74,12 @@
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 zoom: 13,
             }).addTo(map);
+
+            map.locate({
+                setView: true,
+                zoom: 13,
+                enableHighAccuracy: true,
+            });
 
             storeCircle = L.circle([tokoLatitude, tokoLongitude], {
                 color: 'red',
@@ -86,7 +93,6 @@
                 map.locate({
                     setView: true,
                     zoom: 13,
-
                     enableHighAccuracy: true,
                 });
             }, 5000);
@@ -105,10 +111,63 @@
 
                 userCircle = L.circle(e.latlng, 5).addTo(map);
 
+                var userLatLng = userMarker.getLatLng();
+                var userLat = userLatLng.lat;
+                var userLng = userLatLng.lng;
+
+                var storeLatLng = L.latLng(tokoLatitude, tokoLongitude);
+
+                var distance = userLatLng.distanceTo(storeLatLng);
+
+                if (distance <= radiusToko) {
+                    document.getElementById('status').value = "Anda berada di dalam radius";
+                } else {
+                    document.getElementById('status').value =
+                        "Anda berada di luar radius toko. Pastikan Anda berada dalam radius " + radiusToko + " meter";
+                }
+
+
+                hasErrorAlerted = false;
             }
 
             function onLocationError(e) {
-                alert(e.message);
+                if (!hasErrorAlerted) {
+                    alert(e.message);
+                    hasErrorAlerted = true;
+                }
+            }
+
+            function validateForm(event) {
+                map.locate({
+                    setView: true,
+                    zoom: 13,
+                    enableHighAccuracy: true,
+                });
+
+                if (hasErrorAlerted) {
+                    alert('Lokasi tidak ditemukan!')
+                    return false;
+                }
+
+                var userLatLng = userMarker.getLatLng();
+                var userLat = userLatLng.lat;
+                var userLng = userLatLng.lng;
+
+                var storeLatLng = L.latLng(tokoLatitude, tokoLongitude);
+
+                var distance = userLatLng.distanceTo(storeLatLng);
+
+                document.getElementById('latitude').value = userLat;
+                document.getElementById('longitude').value = userLng;
+                document.getElementById('distance').value = distance;
+
+                if (distance <= radiusToko) {
+                    return true;
+                } else {
+                    alert("Anda berada di luar radius toko. Pastikan Anda berada dalam radius " + radiusToko + " meter.");
+                    event.preventDefault();
+                    return false;
+                }
             }
 
             map.on('locationfound', onLocationFound);

@@ -48,7 +48,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($item->lama_kunjungan == null)
+                                @if ($item->lama_kunjungan != null)
                                     {{ $item->lama_kunjungan }} menit
                                 @else
                                     -

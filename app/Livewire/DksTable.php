@@ -38,7 +38,7 @@ class DksTable extends Component
             ->whereDate('in_data.tgl_kunjungan', '=', now()->toDateString())
             ->orderBy('in_data.kd_toko')
             ->get();
-
+            
         return view('livewire.dks-table', compact('items'));
     }
 }
