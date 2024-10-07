@@ -65,27 +65,46 @@
             var userMarker;
             var userCircle;
 
-            var map = L.map('map').fitWorld();
+            var map = L.map('map', {
+                center: [tokoLatitude, tokoLongitude],
+                zoom: 13
+            });
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
+                zoom: 13,
             }).addTo(map);
+
+            storeCircle = L.circle([tokoLatitude, tokoLongitude], {
+                color: 'red',
+                fillColor: 'red',
+                fillOpacity: 0.2,
+                radius: radiusToko
+            }).addTo(map);
+
 
             setInterval(function() {
                 map.locate({
                     setView: true,
-                    maxZoom: 16,
+                    zoom: 13,
+
                     enableHighAccuracy: true,
                 });
-            }, 3000);
+            }, 5000);
 
             function onLocationFound(e) {
-                L.marker(e.latlng).addTo(map)
+                if (userMarker) {
+                    map.removeLayer(userMarker);
+                }
+
+                if (userCircle) {
+                    map.removeLayer(userCircle);
+                }
+
+                userMarker = L.marker(e.latlng).addTo(map)
                     .bindPopup("{{ Auth::user()->username }}").openPopup();
 
-                L.circle(e.latlng, radiusToko).addTo(map);
+                userCircle = L.circle(e.latlng, 5).addTo(map);
 
-                console.log(e)
             }
 
             function onLocationError(e) {
