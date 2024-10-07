@@ -36,7 +36,7 @@
                     <div class="col-12 mb-3">
                         <label for="status" class="form-label">Status</label>
                         <input type="text" class="form-control" id="status" name="status"
-                            value="Lokasi tidak terdeteksi." disabled>
+                            value="Lokasi tidak ditemukan." disabled>
                     </div>
 
                     <div class="col-12 mb-3">
