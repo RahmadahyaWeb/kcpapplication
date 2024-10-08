@@ -89,7 +89,10 @@
                             const encrypted = btoa(kd_toko);
                             const redirectUrl = `/dks-scan/${encrypted}`;
 
-                            window.location.href = redirectUrl;
+                            html5QrCode.stop().then(() => {
+                                window.location.href = redirectUrl;
+                            });
+
                         };
 
                         html5QrCode.start({
