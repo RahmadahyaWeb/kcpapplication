@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DksController;
 use App\Http\Controllers\MasterTokoController;
+use App\Http\Controllers\ReportDKSController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
     // DKS-SCAN
     Route::get('dks-scan/{kd_toko?}', [DksController::class, 'index'])->name('dks.scan');
     Route::post('dks-scan/store/{kd_toko}', [DksController::class, 'store'])->name('dks.store');
+
+    // REPORT DKS
+    Route::get('report/dks', [ReportDKSController::class, 'index'])->name('report.dks');
 
     // MASTER TOKO
     Route::get('master-toko', [MasterTokoController::class, 'index'])->name('master-toko.index');

@@ -61,4 +61,8 @@
             </tbody>
         </table>
     </div>
+
+    <div class="mt-6">
+        {{ $items->links() }}
+    </div>
 </div>

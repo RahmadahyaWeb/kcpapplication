@@ -2,20 +2,17 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class DksTable extends Component
+class ReportDksTable extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public function render()
     {
-        $user = Auth::user()->username;
-
         $items = DB::table('trns_dks AS in_data')
             ->select(
                 'in_data.user_sales',
@@ -38,11 +35,9 @@ class DksTable extends Component
             })
             ->leftJoin('master_toko', 'in_data.kd_toko', '=', 'master_toko.kd_toko')
             ->where('in_data.type', 'in')
-            ->where('in_data.user_sales', $user)
-            ->whereDate('in_data.tgl_kunjungan', '=', now()->toDateString())
-            ->orderBy('in_data.created_at')
-            ->get();
+            ->orderBy('in_data.created_at', 'desc')
+            ->paginate(15);
 
-        return view('livewire.dks-table', compact('items'));
+        return view('livewire.report-dks-table', compact('items'));
     }
 }

@@ -43,15 +43,15 @@
                     </li>
                 @else
                     @if (!empty($menu['submenus']))
-                        <li class="menu-item">
+                        <li class="menu-item {{ Request::is($menu['route']) ? 'active open' : '' }}">
                             <a href="{{ $menu['link'] }}" class="menu-link menu-toggle">
                                 <i class="menu-icon {{ $menu['icon'] }}"></i>
                                 <div class="text-truncate">{{ $menu['title'] }}</div>
                             </a>
                             <ul class="menu-sub">
                                 @foreach ($menu['submenus'] as $submenu)
-                                    <li class="menu-item">
-                                        <a href="{{ $submenu->link }}" class="menu-link">
+                                    <li class="menu-item {{ Request::is($submenu->route) ? 'active' : '' }}">
+                                        <a href="{{ route($submenu->link) }}" class="menu-link">
                                             <div class="text-truncate">{{ $submenu->title }}</div>
                                         </a>
                                     </li>
